@@ -29,6 +29,7 @@ class Location(models.Model):
     def __str__(self):
         return self.code
 
+
 class Room(models.Model):
     """Class that represents room in a campus location."""
     name = models.CharField(max_length=100)
