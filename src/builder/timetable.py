@@ -1,7 +1,8 @@
 import random
+from abc import ABC, abstractmethod
 from timetable.models import CourseClass
 
-class TimetableBuilder:
+class TimetableBuilder(ABC):
     """
     Class that builds timetable. Timetable has dimension of (`rooms` x `timeslots`). Each cell 
     in that 2D array are classes that will be filled by `CourseClass` objects from list of courses.
@@ -70,3 +71,6 @@ class TimetableBuilder:
             or condition_02
             or condition_03
         )
+    
+    @abstractmethod
+    def run(self) -> tuple[dict, int]: pass
