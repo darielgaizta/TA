@@ -1,16 +1,18 @@
-from django.shortcuts import render
+from builder.response import ResponseBuilder
+from rest_framework.decorators import api_view
 from algorithm.genetic import GeneticTimetable
 from . import models
 
+@api_view(['POST'])
 def build_all(request):
-    rooms = models.Room.objects.all()
-    courses = models.Course.objects.all()
-    timeslots = models.Timeslot.objects.all()
-    
     if request.method == 'POST':
+        rooms = models.Room.objects.all()
+        courses = models.CourseClass.objects.all()
+        timeslots = models.Timeslot.objects.all()
+
         # Fetch Genetic timetable parameters.
-        population_size = request.POST.get("population_size")
-        num_generations = request.POST.get("num_generations")
+        population_size = request.data.get("population_size")
+        num_generations = request.data.get("num_generations")
 
         # Build Genetic timetable.
         timetable = GeneticTimetable(
@@ -22,5 +24,7 @@ def build_all(request):
 
         # Run Genetic algorithm.
         solution, conflicts = timetable.run()
-        return render(request, 'main/solution.html', {'solution': solution, 'conflicts': conflicts})
-    return render(request, 'error/405.html')
+        
+        # TODO Write to database Ms. Excel or Google Sheets.
+
+        return ResponseBuilder.respondWithMessage(status=200, message='Success.')

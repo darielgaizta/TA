@@ -44,19 +44,18 @@ class TimetableBuilder(ABC):
             comparator_id = course_id + 1
             while comparator_id < len(self.courses):
                 course_2 = self.courses[comparator_id]
-                if (self.validate(timetable, course_1, course_2)):
-                    comparator_id += 1
-                    continue
-                conflicts += 1
+                if not self.validate(timetable, course_1, course_2):
+                    conflicts += 1
+                comparator_id += 1
             course_id += 1
         return conflicts
     
     def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
         """
-        Returns False if class_1 and class_2 conflict with each other, otherwise returns True.
+        Returns True if class_1 and class_2 conflict with each other, otherwise returns False.
         """
-        room_1, timeslot_1 = timetable[class_1]
-        room_2, timeslot_2 = timetable[class_2]
+        room_1, timeslot_1 = timetable[class_1].values()
+        room_2, timeslot_2 = timetable[class_2].values()
 
         condition_01 = ((timeslot_1 == timeslot_2) and (room_1 == room_2))
         condition_02 = ((class_1.course.code == class_2.course.code) and (timeslot_1 != timeslot_2))

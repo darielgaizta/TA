@@ -53,14 +53,14 @@ class GeneticTimetable(TimetableBuilder):
     def run(self) -> tuple[dict, int]:
         print("GENETIC is running...")
         start_time = time.time()
-        population = [copy.deepcopy(self.solution) for _ in range(self.population_size)]
+        population = [copy.deepcopy(self.timetable) for _ in range(self.population_size)]
         counter = 0
 
         while counter < self.num_generations:
             checkpoint_time = time.time()
 
             # Break immediately if the current population has a solution with 0 conflicts.
-            if (self.evaluate_solution(min(population, key=lambda timetable: self.evaluate_solution(timetable))) == 0
+            if (self.evaluate(min(population, key=lambda timetable: self.evaluate(timetable))) == 0
                 or checkpoint_time - start_time > 180): break
 
             # Calculate the fitness score of each solution (Timetable) in the population.
@@ -78,7 +78,7 @@ class GeneticTimetable(TimetableBuilder):
             counter += 1
         
         if counter == self.num_generations: print("GENETIC timed out.")
-        print("Time taken (Genetic):", time.time() - start_time, "seconds.\n")
+        print("Time taken (Genetic):", time.time() - start_time, "seconds.")
         best_solution = min(population, key=lambda timetable: self.evaluate(timetable))
         best_score = self.evaluate(best_solution)
         return best_solution, best_score
