@@ -51,7 +51,7 @@ class GeneticTimetable(TimetableBuilder):
         return mutated_solution
     
     def run(self) -> tuple[dict, int]:
-        print("GENETIC is running...")
+        print("----------------------------GENETIC ALGORITHM----------------------------")
         start_time = time.time()
         population = [copy.deepcopy(self.timetable) for _ in range(self.population_size)]
         counter = 0
