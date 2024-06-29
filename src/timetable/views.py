@@ -26,8 +26,10 @@ def build_all(request):
         # Run Genetic algorithm.
         solution, conflicts = timetable.run()
         
-        # Write to database Ms. Excel or Google Sheets.
+        # Write to database Ms. Excel.
         filename = 'timetable' + str(round(time.time() * 1000))
-        utils.write_xl(filename=filename, content=solution)
+        xl = utils.Xl(filename=filename)
+        xl.setup(rooms, timeslots)
+        xl.write(solution)
 
         return ResponseBuilder.respondWithMessage(status=200, message=f'Success with {conflicts} conflicts.')
