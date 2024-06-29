@@ -3,7 +3,7 @@ import openpyxl
 
 COLUMNS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-def schedule(filename: str, content: dict):
+def write_xl(filename: str, content: dict):
     """
     Write timetable to xlsx file.
 
