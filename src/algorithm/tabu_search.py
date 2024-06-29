@@ -3,9 +3,11 @@ import copy
 from builder.timetable import TimetableBuilder
 
 class TabuSearchTimetable(TimetableBuilder):
-    def __init__(self, rooms, courses, timeslots):
+    def __init__(self, rooms, courses, timeslots, tabu_list_size, max_iterations):
         super().__init__(rooms, courses, timeslots)
         self.tabu_list = []
+        self.tabu_list_size = tabu_list_size
+        self.max_iterations = max_iterations
     
     def get_neighbors(self, timetable: dict):
         neighbors = []
@@ -25,7 +27,7 @@ class TabuSearchTimetable(TimetableBuilder):
         self.tabu_list.append(timetable)
         if len(self.tabu_list) > tabu_tenure: self.tabu_list.pop(0)
     
-    def run(self, tabu_list_size: int, max_iterations: int) -> tuple[dict, int]:
+    def run(self) -> tuple[dict, int]:
         print("----------------------------TABU SEARCH----------------------------")
         start_time = time.time()
         current_solution = copy.deepcopy(self.timetable)
@@ -34,7 +36,7 @@ class TabuSearchTimetable(TimetableBuilder):
         best_solution, best_score = current_solution, current_score
         counter = 0
 
-        while counter < max_iterations:
+        while counter < self.max_iterations:
             checkpoint_time = time.time()
             if best_score == 0 or checkpoint_time - start_time > 180:
                 break
@@ -57,9 +59,10 @@ class TabuSearchTimetable(TimetableBuilder):
                     best_solution = current_solution
                     best_score = current_score
             
-            self.update_tabu(current_solution, tabu_list_size)
+            self.update_tabu(current_solution, self.tabu_list_size)
             counter += 1
 
-        if counter == max_iterations: print("TABU SEARCH timed out.")
+        if counter == self.max_iterations: print("TABU SEARCH timed out.")
         print("Time taken (Tabu Search):", time.time() - start_time, "seconds.")
+        print(best_solution, '=> Score:', best_score)
         return best_solution, best_score
