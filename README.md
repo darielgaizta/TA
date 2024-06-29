@@ -8,6 +8,6 @@ This project is a submission for my final college project. Its main goal is to f
 2. Enter `./start`
 3. Server will be ready on port 8000.
 
-For MacOS users, the file might not be executable so you have to run `chmod +x start.sh` in your terminal.
+For MacOS users, you might get permission denied so you have to run `chmod +x start.sh` in your terminal.
 
 &copy; 18220009, All rights reserved.
