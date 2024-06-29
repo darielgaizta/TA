@@ -1,6 +1,8 @@
+import time
 from builder.response import ResponseBuilder
 from rest_framework.decorators import api_view
 from algorithm.genetic import GeneticTimetable
+from utils import xlsx
 from . import models
 
 @api_view(['POST'])
@@ -25,6 +27,8 @@ def build_all(request):
         # Run Genetic algorithm.
         solution, conflicts = timetable.run()
         
-        # TODO Write to database Ms. Excel or Google Sheets.
+        # Write to database Ms. Excel or Google Sheets.
+        filename = 'timetable' + str(round(time.time() * 1000))
+        xlsx.schedule(filename=filename, content=solution)
 
-        return ResponseBuilder.respondWithMessage(status=200, message='Success.')
+        return ResponseBuilder.respondWithMessage(status=200, message=f'Success with {conflicts} conflicts.')
