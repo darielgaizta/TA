@@ -3,6 +3,24 @@ import copy
 from builder.timetable import TimetableBuilder
 
 class TabuSearchTimetable(TimetableBuilder):
+    """
+    Class that builds timetable using tabu search.
+
+    ### Args:
+    - rooms (list): List of `Room` objects.
+    - courses (list): List of `CourseClass` objects.
+    - timeslots (list): List of `Timeslot` objects.
+    - tabu_list_size (int): tabu tenure
+    - max_iterations (int): number of iterations.
+
+    ### Attributes:
+    - rooms (list): List of `Room` objects.
+    - courses (list): List of `CourseClass` objects.
+    - timeslots (list): List of `Timeslot` objects.
+    - tabu_list_size (int): tabu tenure
+    - max_iterations (int): number of iterations.
+    """
+
     def __init__(self, rooms, courses, timeslots, tabu_list_size, max_iterations):
         super().__init__(rooms, courses, timeslots)
         self.tabu_list = []
@@ -10,6 +28,7 @@ class TabuSearchTimetable(TimetableBuilder):
         self.max_iterations = max_iterations
     
     def get_neighbors(self, timetable: dict):
+        """Search all neighbors of current solution."""
         neighbors = []
         for course in timetable.keys():
             for room in self.rooms:
@@ -21,6 +40,7 @@ class TabuSearchTimetable(TimetableBuilder):
         return neighbors
         
     def is_tabu(self, timetable: dict) -> bool:
+        """Check if current timetable (solution) is (in) tabu (list)."""
         return timetable in self.tabu_list
     
     def update_tabu(self, timetable: dict, tabu_tenure: int):
