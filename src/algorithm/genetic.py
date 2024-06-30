@@ -77,8 +77,10 @@ class GeneticTimetable(TimetableBuilder):
             population = new_population
             counter += 1
         
-        if counter == self.num_generations: print("GENETIC timed out.")
-        print("Time taken (Genetic Algorithm):", time.time() - start_time, "seconds.")
+        time_taken = time.time() - start_time
+        if time_taken > 180: print('GENETIC ALGORITHM exceeds 3 mins, stopping...')
+        if counter == self.num_generations: print("GENETIC ALGORITHM iterations ended.")
+        print("Time taken (Genetic Algorithm):", time_taken, "seconds.")
         best_solution = min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs))
         best_score = self.evaluate(best_solution, *args, **kwargs)
         print(best_solution, '=> Score:', best_score)

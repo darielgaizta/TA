@@ -34,14 +34,14 @@ def preset(request, runner, *args, **kwargs):
                     for course_class in course.courseclass_set.all():
                         timetable[course_class] = {'room': room, 'timeslot': timeslot}
             
-                    solution, conflicts = runner(*args, **kwargs, preset=timetable)
+            solution, conflicts = runner(*args, **kwargs, preset=timetable, total_preset_course=len(serializer.validated_data))
 
-                    # Write to database Ms. Excel.
-                    filename = 'timetable' + str(round(time.time() * 1000))
-                    xl = utils.Xl(filename=filename)
-                    xl.setup(locations, timeslots)
-                    xl.write(solution)
-                    return ResponseBuilder.respondWithMessage(status=200, message=f'Success with {conflicts} conflicts.')
+            # Write to database Ms. Excel.
+            filename = 'timetable' + str(round(time.time() * 1000))
+            xl = utils.Xl(filename=filename)
+            xl.setup(locations, timeslots)
+            xl.write(solution)
+            return ResponseBuilder.respondWithMessage(status=200, message=f'Success with {conflicts} conflicts.')
         return ResponseBuilder.respondWithMessage(400, serializer.errors)
 
 @api_view(['POST'])

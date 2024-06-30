@@ -82,7 +82,9 @@ class TabuSearchTimetable(TimetableBuilder):
             self.update_tabu(current_solution, self.tabu_list_size)
             counter += 1
 
-        if counter == self.max_iterations: print("TABU SEARCH timed out.")
-        print("Time taken (Tabu Search):", time.time() - start_time, "seconds.")
+        time_taken = time.time() - start_time
+        if time_taken > 180: print('TABU SEARCH exceeds 5 mins, stopping...')
+        if counter == self.max_iterations: print("TABU SEARCH iterations ended.")
+        print("Time taken (Tabu Search):", time_taken, "seconds.")
         print(best_solution, '=> Score:', best_score)
         return best_solution, best_score

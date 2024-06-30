@@ -7,4 +7,4 @@ class CourseClass(models.Model):
     course = models.ForeignKey(course.Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.course.code + '-' + str(self.number)
+        return self.course.code + ' ' + self.course.name + '-' + str(self.number)

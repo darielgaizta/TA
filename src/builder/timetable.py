@@ -45,13 +45,16 @@ class TimetableBuilder(ABC):
             comparator_id = course_id + 1
             while comparator_id < len(self.courses):
                 course_2 = self.courses[comparator_id]
-                if not self.validate(timetable, course_1, course_2, *args, **kwargs):
+                if not self.validate(timetable, course_1, course_2):
                     conflicts += 1
                 comparator_id += 1
             course_id += 1
+        if kwargs.get('preset'):
+            preset = self.get_preset(timetable, kwargs.get('preset'))
+            conflicts += (kwargs.get('total_preset_course') - len(preset.keys()))
         return conflicts
     
-    def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass, *args, **kwargs) -> bool:
+    def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
         """
         Returns True if class_1 and class_2 conflict with each other, otherwise returns False.
         -> True: means conflict found.
@@ -67,16 +70,14 @@ class TimetableBuilder(ABC):
             and (class_1.course.code != class_2.course.code)
             and (room_1.location.code != room_2.location.code)
         )
-        condition_04 = self.search(timetable, kwargs.get('preset')) == {} if kwargs.get('preset') else False
-
         return not (
             condition_01
             or condition_02
             or condition_03
-            or condition_04
         )
     
-    def search(self, timetable: dict, preset: dict):
+    def get_preset(self, timetable: dict, preset: dict):
+        """Search preset classes in timetable"""
         result = {}
         for key, subdict in preset.items():
             is_match = all(item in timetable[key].items() for item in subdict.items() if item[1] != None)
