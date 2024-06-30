@@ -1,5 +1,5 @@
 REM Check if virtual environment folder exists
-IF NOT EXIST venv (
+IF NOT EXIST env (
     REM Create virtual environment
     python -m venv env
 )
