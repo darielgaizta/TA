@@ -24,6 +24,7 @@ class TimetableBuilder(ABC):
         self.timeslots = timeslots
         self.timetable = { course: {'room': None, 'timeslot': None} for course in courses }
         self.randomize()
+        self.preset = None
     
     def randomize(self) -> None:
         """
@@ -33,7 +34,7 @@ class TimetableBuilder(ABC):
             self.timetable[course]['room'] = random.choice(self.rooms)
             self.timetable[course]['timeslot'] = random.choice(self.timeslots)
     
-    def evaluate(self, timetable: dict) -> int:
+    def evaluate(self, timetable: dict, *args, **kwargs) -> int:
         """
         Calculate fitness score by counting conflicts in a timetable.
         """
@@ -44,15 +45,17 @@ class TimetableBuilder(ABC):
             comparator_id = course_id + 1
             while comparator_id < len(self.courses):
                 course_2 = self.courses[comparator_id]
-                if not self.validate(timetable, course_1, course_2):
+                if not self.validate(timetable, course_1, course_2, *args, **kwargs):
                     conflicts += 1
                 comparator_id += 1
             course_id += 1
         return conflicts
     
-    def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
+    def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass, *args, **kwargs) -> bool:
         """
         Returns True if class_1 and class_2 conflict with each other, otherwise returns False.
+        -> True: means conflict found.
+        -> False: means there is no conflict.
         """
         room_1, timeslot_1 = timetable[class_1].values()
         room_2, timeslot_2 = timetable[class_2].values()
@@ -64,12 +67,21 @@ class TimetableBuilder(ABC):
             and (class_1.course.code != class_2.course.code)
             and (room_1.location.code != room_2.location.code)
         )
+        condition_04 = self.search(timetable, kwargs.get('preset')) == {} if kwargs.get('preset') else False
 
         return not (
             condition_01
             or condition_02
             or condition_03
+            or condition_04
         )
     
+    def search(self, timetable: dict, preset: dict):
+        result = {}
+        for key, subdict in preset.items():
+            is_match = all(item in timetable[key].items() for item in subdict.items() if item[1] != None)
+            if is_match: result[key] = timetable[key]
+        return result
+    
     @abstractmethod
-    def run(self) -> tuple[dict, int]: pass
+    def run(self, *args, **kwargs) -> tuple[dict, int]: pass

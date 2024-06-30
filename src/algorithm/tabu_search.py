@@ -47,11 +47,11 @@ class TabuSearchTimetable(TimetableBuilder):
         self.tabu_list.append(timetable)
         if len(self.tabu_list) > tabu_tenure: self.tabu_list.pop(0)
     
-    def run(self) -> tuple[dict, int]:
+    def run(self, *args, **kwargs) -> tuple[dict, int]:
         print("----------------------------TABU SEARCH----------------------------")
         start_time = time.time()
         current_solution = copy.deepcopy(self.timetable)
-        current_score = self.evaluate(current_solution)
+        current_score = self.evaluate(current_solution, *args, **kwargs)
 
         best_solution, best_score = current_solution, current_score
         counter = 0
@@ -67,7 +67,7 @@ class TabuSearchTimetable(TimetableBuilder):
 
             for neighbor in neighbors:
                 if not self.is_tabu(neighbor):
-                    neighbor_score = self.evaluate(neighbor)
+                    neighbor_score = self.evaluate(neighbor, *args, **kwargs)
                     if neighbor_score < best_neighbor_score:
                         best_neighbor = neighbor
                         best_neighbor_score = neighbor_score

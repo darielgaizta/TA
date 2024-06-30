@@ -3,7 +3,7 @@ from django.db.models import Prefetch
 from builder.response import ResponseBuilder
 from rest_framework.decorators import api_view
 from algorithm.runner import Runner
-from . import models, utils
+from .. import models, utils
 
 def build(runner, *args, **kwargs):
     """

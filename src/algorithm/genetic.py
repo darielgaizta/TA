@@ -50,7 +50,7 @@ class GeneticTimetable(TimetableBuilder):
         mutated_solution[course]['timeslot'] = random.choice(self.timeslots)
         return mutated_solution
     
-    def run(self) -> tuple[dict, int]:
+    def run(self, *args, **kwargs) -> tuple[dict, int]:
         print("----------------------------GENETIC ALGORITHM----------------------------")
         start_time = time.time()
         population = [copy.deepcopy(self.timetable) for _ in range(self.population_size)]
@@ -60,11 +60,11 @@ class GeneticTimetable(TimetableBuilder):
             checkpoint_time = time.time()
 
             # Break immediately if the current population has a solution with 0 conflicts.
-            if (self.evaluate(min(population, key=lambda timetable: self.evaluate(timetable))) == 0
+            if (self.evaluate(min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs)), *args, **kwargs) == 0
                 or checkpoint_time - start_time > 180): break
 
             # Calculate the fitness score of each solution (Timetable) in the population.
-            fitness_scores = [self.evaluate(timetable) for timetable in population]
+            fitness_scores = [self.evaluate(timetable, *args, **kwargs) for timetable in population]
             sorted_fitness_scores = sorted(fitness_scores)
 
             # Select parents to perform crossover.
@@ -79,7 +79,7 @@ class GeneticTimetable(TimetableBuilder):
         
         if counter == self.num_generations: print("GENETIC timed out.")
         print("Time taken (Genetic Algorithm):", time.time() - start_time, "seconds.")
-        best_solution = min(population, key=lambda timetable: self.evaluate(timetable))
-        best_score = self.evaluate(best_solution)
+        best_solution = min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs))
+        best_score = self.evaluate(best_solution, *args, **kwargs)
         print(best_solution, '=> Score:', best_score)
         return best_solution, best_score
