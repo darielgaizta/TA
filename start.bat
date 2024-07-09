@@ -13,6 +13,10 @@ pip install -r requirements.txt
 @echo off
 cd src
 
+REM Migrate database
+python manage.py makemigrations
+python manage.py migrate
+
 REM Run the Django server
 python manage.py runserver
 
