@@ -4,30 +4,80 @@ File engine.py is the main part of this application. It contains several functio
 import internal modules, and process them to generate timetable.
 """
 
+import random
+import string
+from timetable import models
+
 class Engine:
-    def __generate_rooms(n: int):
+    def __generate_rooms(self, n: int, locations: list):
         """Generate n Room objects."""
-        pass
+        rooms = []
+        for _ in range(n):
+            room = models.Room(
+                name=self.__get_random_string(50),
+                code=self.__get_random_string(10),
+                capacity=random.randint(1, 100),
+                location=random.choice(locations)
+            )
+            rooms.append(room)
+        return rooms
 
-    def __generate_courses(n: int):
+    def __generate_courses(self, n: int):
         """Generate n Course objects."""
-        pass
+        courses = []
+        for _ in range(n):
+            course = models.Course(
+                name=self.__get_random_string(50),
+                code=self.__get_random_string(10),
+                credit=random.randint(1, 5),
+                semester=random.choice([1, 3, 5, 7]),
+                department=self.__get_random_string(50)
+            )
+            courses.append(course)
+        return courses
 
-    def __generate_timeslots(n: int):
+    def __generate_timeslots(self, n: int):
         """Generate n Timeslot objects."""
-        pass
+        timeslots = []
+        for _ in range(n):
+            timeslot = models.Timeslot(
+                code=self.__get_random_string(10)
+            )
+            timeslots.append(timeslot)
+        return timeslots
     
-    def __generate_locations(n: int):
+    def __generate_locations(self, n: int):
         """Generate n Location objects."""
-        pass
+        locations = []
+        for _ in range(n):
+            location = models.Location(
+                name=self.__get_random_string(50),
+                code=self.__get_random_string(10)
+            )
+            locations.append(location)
+        return locations
         
-    def __generate_lecturers(n: int):
+    def __generate_lecturers(self, n: int):
         """Generate n Lecturer objects."""
-        pass
+        lecturers = []
+        for _ in range(n):
+            lecturer = models.Lecturer(
+                name=self.__get_random_string(50)
+            )
+            lecturers.append(lecturer)
+        return lecturers
 
-    def __generate_course_classes(n: int):
-        """Generate n CourseClass objects."""
-        pass
-    
-    def initialize_timetable():
-        pass
+    def __generate_course_classes(self, n_max: int, courses: list):
+        """Generate [n_min..n_max] CourseClass objects for each Course."""
+        course_classes = []
+        for course in courses:
+            for n in range(1, (n_max + 1)):
+                course_class = models.CourseClass(
+                    number=n,
+                    course=course
+                )
+                course_classes.append(course_class)
+        return course_classes
+
+    def __get_random_string(length: int):
+        return ''.join(random.choice(string.ascii_letters) for _ in range(length))
