@@ -9,6 +9,24 @@ import string
 from timetable import models
 
 class Engine:
+    def __init__(
+            self,
+            nb_rooms: int,
+            nb_courses: int,
+            nb_timeslots: int,
+            nb_locations: int,
+            nb_lecturers: int,
+            nb_max_classes: int,
+            course_lecturers_data: dict,
+        ):
+        self.lecturers = self.__generate_lecturers(nb_lecturers)
+        self.locations = self.__generate_locations(nb_locations)
+        self.timeslots = self.__generate_timeslots(nb_timeslots)
+        self.courses = self.__generate_courses(nb_courses)
+        self.rooms = self.__generate_rooms(nb_rooms, self.locations)
+        self.course_classes = self.__generate_course_classes(nb_max_classes, self.courses)
+        self.course_lecturers = self.__generate_course_lecturers(course_lecturers_data)
+
     def __generate_rooms(self, n: int, locations: list):
         """Generate n Room objects."""
         rooms = []
@@ -78,6 +96,18 @@ class Engine:
                 )
                 course_classes.append(course_class)
         return course_classes
+    
+    def __generate_course_lecturers(self, data: dict[models.Course, list[models.Lecturer]]):
+        """Generate CourseLecturer object based on predefined data."""
+        course_lecturers = []
+        for course in data.keys():
+            for lecturer in data[course]:
+                course_lecturer = models.CourseLecturer(
+                    course=course,
+                    lecturer=lecturer
+                )
+                course_lecturers.append(course_lecturer)
+        return course_lecturers
 
     def __get_random_string(length: int):
         return ''.join(random.choice(string.ascii_letters) for _ in range(length))
