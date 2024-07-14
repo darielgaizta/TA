@@ -5,22 +5,28 @@ import internal modules, and process them to generate timetable.
 """
 
 class Engine:
-    def __get_rooms(range: int):
+    def __generate_rooms(n: int):
+        """Generate n Room objects."""
         pass
 
-    def __get_courses(range: int):
+    def __generate_courses(n: int):
+        """Generate n Course objects."""
         pass
 
-    def __get_timeslots(range: int):
+    def __generate_timeslots(n: int):
+        """Generate n Timeslot objects."""
         pass
     
-    def __get_locations(range: int):
+    def __generate_locations(n: int):
+        """Generate n Location objects."""
         pass
         
-    def __get_lecturers(range: int):
+    def __generate_lecturers(n: int):
+        """Generate n Lecturer objects."""
         pass
 
-    def __get_course_classes(range: int):
+    def __generate_course_classes(n: int):
+        """Generate n CourseClass objects."""
         pass
     
     def initialize_timetable():
