@@ -58,7 +58,7 @@ class TabuSearchTimetable(TimetableBuilder):
 
         while counter < self.max_iterations:
             checkpoint_time = time.time()
-            if best_score == 0 or checkpoint_time - start_time > 180:
+            if best_score == 0 or checkpoint_time - start_time > 300:
                 break
 
             best_neighbor = None
@@ -83,7 +83,7 @@ class TabuSearchTimetable(TimetableBuilder):
             counter += 1
 
         time_taken = time.time() - start_time
-        if time_taken > 180: print('TABU SEARCH exceeds 5 mins, stopping...')
+        if time_taken > 300: print('TABU SEARCH exceeds 5 mins, stopping...')
         if counter == self.max_iterations: print("TABU SEARCH iterations ended.")
         print("Time taken (Tabu Search):", time_taken, "seconds.")
         print(best_solution, '=> Score:', best_score)

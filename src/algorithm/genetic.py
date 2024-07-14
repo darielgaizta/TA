@@ -61,7 +61,7 @@ class GeneticTimetable(TimetableBuilder):
 
             # Break immediately if the current population has a solution with 0 conflicts.
             if (self.evaluate(min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs)), *args, **kwargs) == 0
-                or checkpoint_time - start_time > 180): break
+                or checkpoint_time - start_time > 300): break
 
             # Calculate the fitness score of each solution (Timetable) in the population.
             fitness_scores = [self.evaluate(timetable, *args, **kwargs) for timetable in population]
@@ -78,7 +78,7 @@ class GeneticTimetable(TimetableBuilder):
             counter += 1
         
         time_taken = time.time() - start_time
-        if time_taken > 180: print('GENETIC ALGORITHM exceeds 3 mins, stopping...')
+        if time_taken > 300: print('GENETIC ALGORITHM exceeds 5 mins, stopping...')
         if counter == self.num_generations: print("GENETIC ALGORITHM iterations ended.")
         print("Time taken (Genetic Algorithm):", time_taken, "seconds.")
         best_solution = min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs))
