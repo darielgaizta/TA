@@ -109,5 +109,5 @@ class Engine:
                 course_lecturers.append(course_lecturer)
         return course_lecturers
 
-    def __get_random_string(length: int):
+    def __get_random_string(self, length: int):
         return ''.join(random.choice(string.ascii_letters) for _ in range(length))
