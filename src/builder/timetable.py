@@ -45,16 +45,16 @@ class TimetableBuilder(ABC):
             comparator_id = course_id + 1
             while comparator_id < len(self.courses):
                 course_2 = self.courses[comparator_id]
-                if not self.validate(timetable, course_1, course_2):
+                if not self.__validate_class(timetable, course_1, course_2):
                     conflicts += 1
                 comparator_id += 1
             course_id += 1
         if kwargs.get('preset'):
-            preset = self.get_preset(timetable, kwargs.get('preset'))
-            conflicts += (kwargs.get('total_preset_course') - len(preset.keys()))
+            _, preset_conflict = self.__validate_preset(kwargs.get('total_preset_course'), timetable, kwargs.get('preset'))
+            conflicts += preset_conflict
         return conflicts
     
-    def validate(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
+    def __validate_class(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
         """
         Returns True if class_1 and class_2 conflict with each other, otherwise returns False.
         -> True: means conflict found.
@@ -76,13 +76,23 @@ class TimetableBuilder(ABC):
             or condition_03
         )
     
-    def get_preset(self, timetable: dict, preset: dict):
+    def __match_preset(self, timetable: dict, preset: dict):
         """Search preset classes in timetable"""
         result = {}
         for key, subdict in preset.items():
             is_match = all(item in timetable[key].items() for item in subdict.items() if item[1] != None)
             if is_match: result[key] = timetable[key]
         return result
+    
+    def __validate_preset(self, total_preset_course: int, timetable: dict, preset: dict):
+        matched = self.__match_preset(timetable, preset)
+        conflicts = total_preset_course - len(matched)
+        return matched, conflicts
+    
+    def __validate_advanced(self, timetable: dict, advanced: list):
+        conflicts = 0
+        for preset in advanced:
+            pass
     
     @abstractmethod
     def run(self, *args, **kwargs) -> tuple[dict, int]: pass

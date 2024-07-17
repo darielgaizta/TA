@@ -11,16 +11,45 @@ Future Development: advanced.py will be deleted and migrated to preset.py
 """
 
 from django.db.models import Prefetch
+from rest_framework.exceptions import ValidationError
 from .. import models, serializers
 
 def advanced(request):
     if request.method == 'POST':
-        serializer = serializers.PresetSerializer(data=request.data, many=True)
+        serializer = serializers.AdvancedSerializer(data=request.data, many=True)
         if serializer.is_valid():
             timetable = {}
             timeslots = models.Timeslot.objects.all()
             locations = models.Location.objects.prefetch_related(
                 Prefetch('room_set', queryset=models.Room.objects.order_by('id')))
             
+            choices = []
+            
             for data in serializer.validated_data:
-                pass
+                chosen = {}
+                length = data.get('length', -1)
+                preset = data.get('preset', [])
+                if length != len(preset):
+                    raise ValidationError(f'Property "length" ({length}) is not equal to the actual length of preset ({len(preset)}).')
+
+                # Iterate every lecturer's preset schedule
+                for p in preset:
+                    room = models.Room.objects.filter(code=p.get('room'))
+                    course = models.Course.objects.filter(code=p.get('course'))
+                    timeslot = models.Timeslot.objects.filter(code=p.get('timeslot'))
+
+                    # Fetch data if exists in database
+                    room = room.get() if room.exists() else None
+                    timeslot = timeslot.get() if timeslot.exists() else None
+
+                    # Fetch course data with related classes
+                    if course.exists():
+                        course = course.prefetch_related(Prefetch('courseclass_set', queryset=models.CourseClass.objects.order_by('id'))).get()
+                        for course_class in course.courseclass_set.all():
+                            timetable[course_class] = {'room': room, 'timeslot': timeslot}
+                            chosen[course_class] = {'room': room, 'timeslot': timeslot}
+                
+                # TODO Identify lecturer
+                if length > 1: choices.append(chosen)
+            
+            # TODO Run with validation for chosen lecture preference

@@ -11,7 +11,7 @@ from .. import models, serializers, utils
 
 def preset(request, runner, *args, **kwargs):
     if request.method == 'POST':
-        serializer = serializers.ScheduleSerializer(data=request.data, many=True)
+        serializer = serializers.PresetSerializer(data=request.data, many=True)
         if serializer.is_valid():
             timetable = {}
             timeslots = models.Timeslot.objects.all()

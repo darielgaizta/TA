@@ -1,2 +1,2 @@
-from .schedule import ScheduleSerializer
 from .preset import PresetSerializer
+from .advanced import AdvancedSerializer
