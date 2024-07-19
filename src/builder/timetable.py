@@ -89,8 +89,5 @@ class TimetableBuilder(ABC):
         conflicts = total_preset_course - len(matched)
         return matched, conflicts
     
-    def __validate_advanced(self, timetable: dict, advanced: dict):
-        pass
-    
     @abstractmethod
     def run(self, *args, **kwargs) -> tuple[dict, int]: pass
