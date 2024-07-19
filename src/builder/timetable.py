@@ -79,9 +79,9 @@ class TimetableBuilder(ABC):
     def __match_preset(self, timetable: dict, preset: dict):
         """Search preset classes in timetable"""
         result = {}
-        for key, subdict in preset.items():
-            is_match = all(item in timetable[key].items() for item in subdict.items() if item[1] != None)
-            if is_match: result[key] = timetable[key]
+        for course_class, subdict in preset.items():
+            is_match = all(item in timetable[course_class].items() for item in subdict.items() if item[1] != None)
+            if is_match: result[course_class] = timetable[course_class]
         return result
     
     def __validate_preset(self, total_preset_course: int, timetable: dict, preset: dict):
@@ -89,10 +89,8 @@ class TimetableBuilder(ABC):
         conflicts = total_preset_course - len(matched)
         return matched, conflicts
     
-    def __validate_advanced(self, timetable: dict, advanced: list):
-        conflicts = 0
-        for preset in advanced:
-            pass
+    def __validate_advanced(self, timetable: dict, advanced: dict):
+        pass
     
     @abstractmethod
     def run(self, *args, **kwargs) -> tuple[dict, int]: pass

@@ -47,3 +47,7 @@ def advanced(request):
                             timetable[course_class] = {'room': room, 'timeslot': timeslot, 'neighbors': neighbors}
 
                             # TODO Deal with neighbors
+                
+                # TODO Run
+
+                # TODO Write output to Ms. Excel
