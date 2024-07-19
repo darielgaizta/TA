@@ -23,10 +23,7 @@ def advanced(request):
             locations = models.Location.objects.prefetch_related(
                 Prefetch('room_set', queryset=models.Room.objects.order_by('id')))
             
-            choices = []
-            
             for data in serializer.validated_data:
-                chosen = {}
                 length = data.get('length', -1)
                 preset = data.get('preset', [])
                 if length != len(preset):
@@ -45,11 +42,8 @@ def advanced(request):
                     # Fetch course data with related classes
                     if course.exists():
                         course = course.prefetch_related(Prefetch('courseclass_set', queryset=models.CourseClass.objects.order_by('id'))).get()
+                        neighbors = [p.get('course') for p in preset if p.get('course') != course.code]
                         for course_class in course.courseclass_set.all():
-                            timetable[course_class] = {'room': room, 'timeslot': timeslot}
-                            chosen[course_class] = {'room': room, 'timeslot': timeslot}
-                
-                # TODO Identify lecturer
-                if length > 1: choices.append(chosen)
-            
-            # TODO Run with validation for chosen lecture preference
+                            timetable[course_class] = {'room': room, 'timeslot': timeslot, 'neighbors': neighbors}
+
+                            # TODO Deal with neighbors
