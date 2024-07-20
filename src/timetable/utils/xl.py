@@ -6,7 +6,7 @@ class Xl:
 
     def __init__(self, filename: str):
         self.filename = filename
-        self.filepath = str(settings.OUT_DIR / filename) + '.xlsx'
+        self.filepath = str(settings.TABLES_DIR / filename) + '.xlsx'
 
     def create_workbook(self):
         openpyxl.Workbook().save(self.filepath)
