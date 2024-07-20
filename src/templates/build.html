@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Timetable: Build</title>
+{% endblock title %}
+
+
+{% block content %}
+<main>
+    <form action="POST">
+        <div>
+            <label for="timeslots">Timeslots</label>
+            <input type="number" id="timeslots" name="timeslots" min="1" max="10">
+        </div>
+        <div>
+            <label for="courses">Courses</label>
+            <input type="number" id="courses" name="courses" min="1">
+        </div>
+        <div>
+            <label for="max_classes">Max Classes</label>
+            <input type="number" id="max_classes" name="max_classes" min="1">
+        </div>
+        <div>
+            <label for="rooms">Rooms</label>
+            <input type="number" id="rooms" name="rooms" min="1">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</main>
+{% endblock content %}
+
+
+{% block js %}
+<script>
+    function updateCoursesMax() {
+        // Get the values of timeslots and rooms
+        const timeslots = parseInt(document.getElementById('timeslots').value) || 1;
+        const rooms = parseInt(document.getElementById('rooms').value) || 1;
+        
+        // Calculate the new max value
+        const maxCourses = timeslots * rooms;
+        
+        // Set the max value for the courses input
+        document.getElementById('courses').setAttribute('max', maxCourses);
+    }
+
+    // Attach event listeners to update max value when timeslots or rooms change
+    document.getElementById('timeslots').addEventListener('input', updateCoursesMax);
+    document.getElementById('rooms').addEventListener('input', updateCoursesMax);
+
+    // Initialize max value on page load
+    updateCoursesMax();
+</script>
+{% endblock js %}
+    
