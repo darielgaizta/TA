@@ -57,3 +57,7 @@ def build_with_ts(request):
         timeslots=timeslots,
         tabu_list_size=tabu_list_size,
         max_iterations=max_iterations)
+
+def fake_build():
+    # TODO Randomize data based on a given range.
+    pass
