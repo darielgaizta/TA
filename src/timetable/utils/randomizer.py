@@ -15,8 +15,7 @@ class Randomizer:
                  nb_courses,
                  nb_classes,
                  nb_timeslots,
-                 nb_locations,
-                 nb_lecturers
+                 nb_locations
                  ):
         """
         Constructor for Randomizer will initialize random instance for the timetable models.
@@ -29,7 +28,6 @@ class Randomizer:
         self.__classes = []
         self.__timeslots = []
         self.__locations = []
-        self.__lecturers = []
         self.__generate_rooms(nb_rooms, nb_locations)
         self.__generate_classes(nb_classes, nb_courses)
         self.__generate_timeslots(nb_timeslots)
@@ -48,6 +46,7 @@ class Randomizer:
                 location=location
             )
             self.__rooms.append(new_room)
+        self.__rooms = sorted(self.__rooms, key=lambda room: room.location.code)
 
     def __generate_courses(self, nb_courses):
         for _ in range(nb_courses):
@@ -89,9 +88,6 @@ class Randomizer:
             new_location = models.Location.objects.create(name=name, code=code)
             self.__locations.append(new_location)
 
-    def __generate_lecturers(self, nb_lecturers):
-        pass
-
     def get_rooms(self):
         return self.__rooms
 
@@ -106,6 +102,3 @@ class Randomizer:
 
     def get_locations(self):
         return self.__locations
-
-    def get_lecturers(self):
-        return self.__lecturers

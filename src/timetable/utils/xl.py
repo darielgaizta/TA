@@ -21,13 +21,18 @@ class Xl:
             print('Failed', e)
             exit()
 
-    def setup(self, locations, timeslots):
+    def setup(self, timeslots, locations = None, rooms = None):
         """Setup table by writing titles for rows (locations<rooms>) and columns (timeslots)."""
         self.create_workbook()
         workbook, worksheet = self.load_workbook()
         col = 1 # Setup columns.
-        for location in locations:
-            for room in location.room_set.all():
+        if locations:
+            for location in locations:
+                for room in location.room_set.all():
+                    worksheet[self.__COLUMNS[col] + '1'] = location.code + '-' + room.code
+                    col += 1
+        if rooms:
+            for room in rooms:
                 worksheet[self.__COLUMNS[col] + '1'] = location.code + '-' + room.code
                 col += 1
         row = 2 # Setup rows.

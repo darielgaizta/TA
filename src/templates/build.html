@@ -12,7 +12,8 @@
 
 {% block content %}
 <main class="container">
-    <form action="POST" class="form-wrapper">
+    <form action="{% url 'ui_build' %}" class="form-wrapper" method="POST">
+        {% csrf_token %}
         <div id="form-build-wrapper">
             <div id="form-problem">
                 <div class="form-group">
@@ -26,13 +27,18 @@
                     <input type="number" id="courses" name="courses" min="1">
                 </div>
                 <div class="form-group">
-                    <label for="max_classes">Max Classes</label>
+                    <label for="classes">Classes</label>
                     <small>Max amount of classes for each course.</small>
-                    <input type="number" id="max_classes" name="max_classes" min="1">
+                    <input type="number" id="classes" name="classes" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="locations">Locations</label>
+                    <small>Number of locations.</small>
+                    <input type="number" name="locations" id="locations" min="1">
                 </div>
                 <div class="form-group">
                     <label for="rooms">Rooms</label>
-                    <small>Number of involved rooms.</small>
+                    <small>Number of available rooms.</small>
                     <input type="number" id="rooms" name="rooms" min="1">
                 </div>
             </div>
