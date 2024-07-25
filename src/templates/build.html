@@ -13,29 +13,56 @@
 {% block content %}
 <main class="container">
     <form action="POST" class="form-wrapper">
-        <div id="form-problem">
-            <div class="form-group">
-                <label for="timeslots">Timeslots</label>
-                <input type="number" id="timeslots" name="timeslots" min="1" max="10">
+        <div id="form-build-wrapper">
+            <div id="form-problem">
+                <div class="form-group">
+                    <label for="timeslots">Timeslots</label>
+                    <small>Number of timeslots in a day.</small>
+                    <input type="number" id="timeslots" name="timeslots" min="1" max="10">
+                </div>
+                <div class="form-group">
+                    <label for="courses">Courses</label>
+                    <small>Number of involved courses.</small>
+                    <input type="number" id="courses" name="courses" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="max_classes">Max Classes</label>
+                    <small>Max amount of classes for each course.</small>
+                    <input type="number" id="max_classes" name="max_classes" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="rooms">Rooms</label>
+                    <small>Number of involved rooms.</small>
+                    <input type="number" id="rooms" name="rooms" min="1">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="courses">Courses</label>
-                <input type="number" id="courses" name="courses" min="1">
+            <div id="form-params">
+                <div class="form-group">
+                    <label for="search_space">Search Space</label>
+                    <small>Define How big is your search space.</small>
+                    <input type="number" name="search_space" id="search_space" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="iterations">Iterations</label>
+                    <small>Define how many iterations you want.</small>
+                    <input type="number" name="iterations" id="iterations" min="1">
+                </div>
+                <div class="radio-group">
+                    <p>Algorithm:</p>
+                    <div class="radio-member">
+                        <input type="radio" name="algorithm" id="ts" value="ts" checked="checked">
+                        <label for="ts">Tabu Search</label>
+                    </div>
+                    <div class="radio-member">
+                        <input type="radio" name="algorithm" id="ga" value="ga">
+                        <label for="ga">Genetic</label>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="max_classes">Max Classes</label>
-                <input type="number" id="max_classes" name="max_classes" min="1">
-            </div>
-            <div class="form-group">
-                <label for="rooms">Rooms</label>
-                <input type="number" id="rooms" name="rooms" min="1">
-            </div>
-        </div>
-        <div id="form-params">
-            Lorem ipsum
         </div>
         <button type="submit">Submit</button>
     </form>
+    <p>Result goes here...</p>
 </main>
 {% endblock content %}
 
