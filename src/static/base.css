@@ -1,0 +1,47 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.container {
+    padding: 15px;
+}
+
+header {
+    background-color: darkslategray;
+    color: white;
+}
+
+#header-title {
+    padding: 15px 0;
+}
+
+.nav-link {
+    padding: 5px 1rem;
+    text-decoration: none;
+    color: black;
+    border-radius: 5%;
+    background-color: burlywood;
+}
+
+.nav-link:hover {
+    border-bottom: 2px solid skyblue;
+}
+
+.form-wrapper {
+    display: block;
+    width: 100%;
+    padding: 1rem
+}
+
+.form-wrapper button {
+    padding: 0.4em 1em;
+    margin: 1.5em auto 1em auto;
+}
+
+.form-group label, .form-group input  {
+    display: block;
+    width: 100%;
+    margin: 0.2em auto;
+}

@@ -15,6 +15,10 @@ def ui_build(request):
         nb_locations,
         0
     )
-    print(randomizer.get_classes())
-    print(randomizer.get_rooms())
+    print('----Classes\n', randomizer.get_classes())
+    print('----Locations\n', randomizer.get_locations())
+    print('----Rooms\n', randomizer.get_rooms())
+    print('----Timeslots\n', randomizer.get_timeslots())
+    for room in randomizer.get_rooms():
+        print(room, '---->', room.location)
     return render(request, 'build.html')

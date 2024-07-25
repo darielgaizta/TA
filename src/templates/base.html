@@ -7,18 +7,26 @@
     <title>Timetable</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    {% block 'css' %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+    {% block css %}
     {% endblock %}
-    {% block jquery %}
-	{% endblock %}
     {% block title %}
+	{% endblock %}
+    {% block jquery %}
 	{% endblock %}
 </head>
 <body>
-    <header>
-        <h1>Timetable Generator</h1>
-        <p>Patiently made for Tugas Akhir 2</p>
+    <header class="container">
+        <div id="header-title">
+            <h1>Timetable Generator</h1>
+            <p>Patiently made for Tugas Akhir 2</p>
+        </div>
+        <div id="header-nav">
+            <nav>
+                <a href="#" class="nav-link" id="build">Build</a>
+                <a href="#" class="nav-link" id="preset">Preset</a>
+            </nav>
+        </div>
     </header>
     {% block content %}
     {% endblock %}
