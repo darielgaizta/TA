@@ -35,11 +35,11 @@ class Randomizer:
     def __generate_rooms(self, nb_rooms, nb_locations):
         self.__generate_locations(nb_locations)
         for _ in range(nb_rooms):
-            name = self.__faker.name()
-            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+            name = self.__faker.last_name()
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             capacity = random.randint(10, 100)
             location = random.choice(self.__locations)
-            new_room = models.Room(
+            new_room = models.Room.objects.create(
                 name=name,
                 code=code,
                 capacity=capacity,
@@ -50,12 +50,12 @@ class Randomizer:
 
     def __generate_courses(self, nb_courses):
         for _ in range(nb_courses):
-            name = self.__faker.name()
-            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+            name = self.__faker.last_name_female()
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             credit = random.randint(2, 5)
             semester = random.randint(1, 4)
             department = self.__faker.name()
-            new_courses = models.Course(
+            new_courses = models.Course.objects.create(
                 name=name,
                 code=code,
                 credit=credit,
@@ -69,7 +69,7 @@ class Randomizer:
         for course in self.__courses:
             n = random.randint(1, nb_classes)
             for i in range(1, n + 1):
-                new_course_class = models.CourseClass(
+                new_course_class = models.CourseClass.objects.create(
                     number=i,
                     course=course
                 )
@@ -77,15 +77,15 @@ class Randomizer:
 
     def __generate_timeslots(self, nb_timeslots):
         for _ in range(nb_timeslots):
-            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            new_timeslot = models.Timeslot(code=code)
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            new_timeslot = models.Timeslot.objects.create(code=code)
             self.__timeslots.append(new_timeslot)
 
     def __generate_locations(self, nb_locations):
         for _ in range(nb_locations):
-            name = self.__faker.name()
-            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            new_location = models.Location(name=name, code=code)
+            name = self.__faker.first_name_male()
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+            new_location = models.Location.objects.create(name=name, code=code)
             self.__locations.append(new_location)
 
     def get_rooms(self):
