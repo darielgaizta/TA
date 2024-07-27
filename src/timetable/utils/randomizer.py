@@ -39,7 +39,7 @@ class Randomizer:
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
             capacity = random.randint(10, 100)
             location = random.choice(self.__locations)
-            new_room = models.Room.objects.create(
+            new_room = models.Room(
                 name=name,
                 code=code,
                 capacity=capacity,
@@ -55,7 +55,7 @@ class Randomizer:
             credit = random.randint(2, 5)
             semester = random.randint(1, 4)
             department = self.__faker.name()
-            new_courses = models.Course.objects.create(
+            new_courses = models.Course(
                 name=name,
                 code=code,
                 credit=credit,
@@ -69,7 +69,7 @@ class Randomizer:
         for course in self.__courses:
             n = random.randint(1, nb_classes)
             for i in range(1, n + 1):
-                new_course_class = models.CourseClass.objects.create(
+                new_course_class = models.CourseClass(
                     number=i,
                     course=course
                 )
@@ -78,14 +78,14 @@ class Randomizer:
     def __generate_timeslots(self, nb_timeslots):
         for _ in range(nb_timeslots):
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            new_timeslot = models.Timeslot.objects.create(code=code)
+            new_timeslot = models.Timeslot(code=code)
             self.__timeslots.append(new_timeslot)
 
     def __generate_locations(self, nb_locations):
         for _ in range(nb_locations):
             name = self.__faker.name()
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            new_location = models.Location.objects.create(name=name, code=code)
+            new_location = models.Location(name=name, code=code)
             self.__locations.append(new_location)
 
     def get_rooms(self):

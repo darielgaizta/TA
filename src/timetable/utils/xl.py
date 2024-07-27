@@ -25,7 +25,11 @@ class Xl:
         """Setup table by writing titles for rows (locations<rooms>) and columns (timeslots)."""
         self.create_workbook()
         workbook, worksheet = self.load_workbook()
-        col = 1 # Setup columns.
+        if locations and rooms or not locations and not rooms:
+            raise Exception('Choose setup by locations or rooms only!')
+        
+        # Setup columns.
+        col = 1
         if locations:
             for location in locations:
                 for room in location.room_set.all():
@@ -33,9 +37,11 @@ class Xl:
                     col += 1
         if rooms:
             for room in rooms:
-                worksheet[self.__COLUMNS[col] + '1'] = location.code + '-' + room.code
+                worksheet[self.__COLUMNS[col] + '1'] = room.location.code + '-' + room.code
                 col += 1
-        row = 2 # Setup rows.
+        
+        # Setup rows.
+        row = 2
         for timeslot in timeslots:
             worksheet['A' + str(row)] = timeslot.code
             row += 1
