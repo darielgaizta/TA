@@ -63,7 +63,6 @@ class TimetableBuilder(ABC):
             found = {k: v for k, v in timetable.items() if k.course == course
                      and any(item in v.items() for item in subdict.items() if item[1] != None)}
             matches = matches | found
-        print('Found matches:', matches)
         conflict = len(presets) - len(matches)
         return 0 if conflict <= 0 else conflict
 

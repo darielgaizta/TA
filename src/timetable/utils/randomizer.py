@@ -15,7 +15,10 @@ class Randomizer:
                  nb_courses,
                  nb_classes,
                  nb_timeslots,
-                 nb_locations
+                 nb_locations,
+                 only_room=0,
+                 only_timeslot=0,
+                 both_room_timeslot=0
                  ):
         """
         Constructor for Randomizer will initialize random instance for the timetable models.
@@ -24,6 +27,7 @@ class Randomizer:
         print("Instantiating objects with random value...")
         self.__faker = Faker()
         self.__rooms = []
+        self.__presets = []
         self.__courses = []
         self.__classes = []
         self.__timeslots = []
@@ -31,6 +35,8 @@ class Randomizer:
         self.__generate_rooms(nb_rooms, nb_locations)
         self.__generate_classes(nb_classes, nb_courses)
         self.__generate_timeslots(nb_timeslots)
+        if only_room or only_timeslot or both_room_timeslot:
+            self.__generate_presets(only_room, only_timeslot, both_room_timeslot)
 
     def __generate_rooms(self, nb_rooms, nb_locations):
         self.__generate_locations(nb_locations)
@@ -88,8 +94,26 @@ class Randomizer:
             new_location = models.Location.objects.create(name=name, code=code)
             self.__locations.append(new_location)
 
+    def __generate_presets(self, only_room, only_timeslot, both_room_timeslot):
+        for _ in range(only_room):
+            course = random.choice(self.__courses)
+            room = random.choice(self.__rooms)
+            self.__presets.append({course: {'room': room, 'timeslot': None}})
+        for _ in range(only_timeslot):
+            course = random.choice(self.__courses)
+            timeslot = random.choice(self.__timeslots)
+            self.__presets.append({course: {'room': None, 'timeslot': timeslot}})
+        for _ in range(both_room_timeslot):
+            course = random.choice(self.__courses)
+            room = random.choice(self.__rooms)
+            timeslot = random.choice(self.__timeslots)
+            self.__presets.append({course: {'room': room, 'timeslot': timeslot}})
+
     def get_rooms(self):
         return self.__rooms
+    
+    def get_presets(self):
+        return self.__presets
 
     def get_courses(self):
         return self.__courses
