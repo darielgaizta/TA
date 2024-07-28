@@ -85,4 +85,4 @@ class TimetableBuilder(ABC):
         return 1 if is_conflict else 0
     
     @abstractmethod
-    def run(self, *args, **kwargs) -> tuple[dict, int]: pass
+    def run(self, *args, **kwargs) -> tuple[dict, int, int]: pass

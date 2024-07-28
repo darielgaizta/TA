@@ -47,7 +47,7 @@ class TabuSearchTimetable(TimetableBuilder):
         self.tabu_list.append(timetable)
         if len(self.tabu_list) > tabu_tenure: self.tabu_list.pop(0)
     
-    def run(self, *args, **kwargs) -> tuple[dict, int]:
+    def run(self, *args, **kwargs) -> tuple[dict, int, int]:
         print("----------------------------TABU SEARCH----------------------------")
         start_time = time.time()
         current_solution = copy.deepcopy(self.timetable)
@@ -87,4 +87,4 @@ class TabuSearchTimetable(TimetableBuilder):
         if counter == self.max_iterations: print("TABU SEARCH iterations ended.")
         print("Time taken (Tabu Search):", time_taken, "seconds.")
         print(best_solution, '=> Score:', best_score)
-        return best_solution, best_score
+        return best_solution, best_score, time_taken

@@ -3,16 +3,16 @@
 {% load static %}
 
 {% block title %}
-    <title>Timetable: Build</title>
-{% endblock title %}
+<title>Timetable: Preset</title>
+{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'build.css' %}">
-{% endblock css %}
+<link rel="stylesheet" href="{% static 'preset.css' %}">
+{% endblock %}
 
 {% block content %}
 <main class="container">
-    <form action="{% url 'ui_build' %}" class="form-wrapper" method="POST">
+    <form action="{% url 'ui_preset' %}" method="POST" class="form-wrapper">
         {% csrf_token %}
         <div id="form-build-wrapper">
             <div id="form-problem">
@@ -68,55 +68,9 @@
         </div>
         <button type="submit">Submit</button>
     </form>
-    {% if solution %}
-    <table>
-        <tr>
-            <td>time_taken</td>
-            <td>{{ time_taken }}</td>
-        </tr>
-        <tr>
-            <td>conflict</td>
-            <td>{{ conflict }}</td>
-        </tr>
-        <tr>
-            <td>nb_rooms</td>
-            <td>{{ nb_rooms }}</td>
-        </tr>
-        <tr>
-            <td>nb_courses</td>
-            <td>{{ nb_courses }}</td>
-        </tr>
-        <tr>
-            <td>nb_classes</td>
-            <td>{{ nb_classes }}</td>
-        </tr>
-        <tr>
-            <td>nb_timeslots</td>
-            <td>{{ nb_timeslots }}</td>
-        </tr>
-        <tr>
-            <td>nb_locations</td>
-            <td>{{ nb_locations }}</td>
-        </tr>
-        <tr>
-            <td>search_space</td>
-            <td>{{ search_space }}</td>
-        </tr>
-        <tr>
-            <td>iterations</td>
-            <td>{{ iterations }}</td>
-        </tr>
-        <tr>
-            <td>algorithm</td>
-            <td>{{ algorithm }}</td>
-        </tr>
-    </table>
-    {% else %}
     <p>Result goes here...</p>
-    {% endif %}
 </main>
-{% endblock content %}
-
+{% endblock %}
 
 {% block js %}
 <script>
@@ -140,4 +94,3 @@
     updateCoursesMax();
 </script>
 {% endblock js %}
-    

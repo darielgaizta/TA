@@ -50,7 +50,7 @@ class GeneticTimetable(TimetableBuilder):
         mutated_solution[course]['timeslot'] = random.choice(self.timeslots)
         return mutated_solution
     
-    def run(self, *args, **kwargs) -> tuple[dict, int]:
+    def run(self, *args, **kwargs) -> tuple[dict, int, int]:
         print("----------------------------GENETIC ALGORITHM----------------------------")
         start_time = time.time()
         population = [copy.deepcopy(self.timetable) for _ in range(self.population_size)]
@@ -84,4 +84,4 @@ class GeneticTimetable(TimetableBuilder):
         best_solution = min(population, key=lambda timetable: self.evaluate(timetable, *args, **kwargs))
         best_score = self.evaluate(best_solution, *args, **kwargs)
         print(best_solution, '=> Score:', best_score)
-        return best_solution, best_score
+        return best_solution, best_score, time_taken
