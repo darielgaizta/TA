@@ -3,14 +3,13 @@ main {
     grid-template-columns: 50% 50%;
 }
 
-#form-build-wrapper {
+#form-input-wrapper {
     display: grid;
-    grid-template-columns: 50% 50%;
-    height: 100%;
+    grid-template-columns: 35% 35% 30%;
     width: 100%;
 }
 
-#form-problem, #form-params {
+#form-problem, #form-params, #form-preset {
     padding: 1em;
     border: 1px solid gray;
     width: 100%;

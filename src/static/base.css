@@ -29,6 +29,10 @@ header {
     background-color: rgb(255, 225, 186);
 }
 
+.nav-active {
+    border-bottom: 3px solid rgb(255, 225, 186);
+}
+
 .form-wrapper {
     display: block;
     width: 100%;

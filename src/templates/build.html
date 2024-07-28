@@ -10,6 +10,14 @@
 <link rel="stylesheet" type="text/css" href="{% static 'build.css' %}">
 {% endblock css %}
 
+{% block jquery %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#build").addClass("nav-active");
+	})
+</script>
+{% endblock jquery %}
+
 {% block content %}
 <main class="container">
     <form action="{% url 'ui_build' %}" class="form-wrapper" method="POST">
