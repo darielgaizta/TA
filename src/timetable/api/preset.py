@@ -13,12 +13,14 @@ def preset(request, runner, *args, **kwargs):
     if request.method == 'POST':
         serializer = serializers.PresetSerializer(data=request.data, many=True)
         if serializer.is_valid():
-            timetable = {}
             timeslots = models.Timeslot.objects.all()
             locations = models.Location.objects.prefetch_related(
                 Prefetch('room_set', queryset=models.Room.objects.order_by('id')))
             
+            presets = []
+            
             for data in serializer.validated_data:
+
                 # Search data in database
                 room = models.Room.objects.filter(code=data.get('room'))
                 course = models.Course.objects.filter(code=data.get('course'))
@@ -30,16 +32,15 @@ def preset(request, runner, *args, **kwargs):
 
                 # Fetch course data with related classes
                 if course.exists():
-                    course = course.prefetch_related(Prefetch('courseclass_set', queryset=models.CourseClass.objects.order_by('id'))).get()
-                    for course_class in course.courseclass_set.all():
-                        timetable[course_class] = {'room': room, 'timeslot': timeslot}
+                    presets.append({course.get(): {'room': room, 'timeslot': timeslot}})
             
-            solution, conflicts = runner(*args, **kwargs, preset=timetable, total_preset_course=len(serializer.validated_data))
+            print('Received preset:', presets)
+            solution, conflicts = runner(*args, **kwargs, presets=presets)
 
             # Write to database Ms. Excel.
             filename = 'timetable' + str(round(time.time() * 1000))
             xl = utils.Xl(filename=filename)
-            xl.setup(locations, timeslots)
+            xl.setup(timeslots, locations=locations)
             xl.write(solution)
             return ResponseBuilder.respondWithMessage(status=200, message=f'Success with {conflicts} conflicts.')
         return ResponseBuilder.respondWithMessage(400, serializer.errors)

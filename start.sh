@@ -12,8 +12,6 @@ pip install -r requirements.txt
 
 cd src
 
-python manage.py flush --no-input
-
 # Migrate database
 python manage.py makemigrations
 python manage.py migrate

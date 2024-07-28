@@ -44,7 +44,7 @@ class Xl:
         row = 2
         counter = 1
         for timeslot in timeslots:
-            worksheet['A' + str(row)] = 'T' + str(counter) + '-' + timeslot.code
+            worksheet['A' + str(row)] = 'C' + str(counter) + timeslot.code
             row += 1
             counter += 1
         workbook.save(self.filepath)

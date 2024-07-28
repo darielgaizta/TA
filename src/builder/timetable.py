@@ -24,7 +24,6 @@ class TimetableBuilder(ABC):
         self.timeslots = timeslots
         self.timetable = { course: {'room': None, 'timeslot': None} for course in courses }
         self.randomize()
-        self.preset = None
     
     def randomize(self) -> None:
         """
@@ -35,59 +34,55 @@ class TimetableBuilder(ABC):
             self.timetable[course]['timeslot'] = random.choice(self.timeslots)
     
     def evaluate(self, timetable: dict, *args, **kwargs) -> int:
-        """
-        Calculate fitness score by counting conflicts in a timetable.
-        """
-        conflicts = 0
-        course_id = 0
-        while course_id < len(self.courses):
-            course_1 = self.courses[course_id]
-            comparator_id = course_id + 1
-            while comparator_id < len(self.courses):
-                course_2 = self.courses[comparator_id]
-                if not self.__validate_class(timetable, course_1, course_2):
-                    conflicts += 1
-                comparator_id += 1
-            course_id += 1
-        if kwargs.get('preset'):
-            _, preset_conflict = self.__validate_preset(kwargs.get('total_preset_course'), timetable, kwargs.get('preset'))
-            conflicts += preset_conflict
-        return conflicts
-    
-    def __validate_class(self, timetable: dict, class_1: CourseClass, class_2: CourseClass) -> bool:
-        """
-        Returns True if class_1 and class_2 conflict with each other, otherwise returns False.
-        -> True: means conflict found.
-        -> False: means there is no conflict.
-        """
-        room_1, timeslot_1 = timetable[class_1].values()
-        room_2, timeslot_2 = timetable[class_2].values()
+        conflict = 0
+        class_id = 0
 
-        condition_01 = ((timeslot_1 == timeslot_2) and (room_1 == room_2))
-        condition_02 = ((class_1.course.code == class_2.course.code) and (timeslot_1 != timeslot_2))
-        condition_03 = (
-            (class_1.number == class_2.number)
-            and (class_1.course.code != class_2.course.code)
-            and (room_1.location.code != room_2.location.code)
-        )
-        return not (
-            condition_01
-            or condition_02
-            or condition_03
-        )
-    
-    def __match_preset(self, timetable: dict, preset: dict):
-        """Search preset classes in timetable"""
-        result = {}
-        for course_class, subdict in preset.items():
-            is_match = all(item in timetable[course_class].items() for item in subdict.items() if item[1] != None)
-            if is_match: result[course_class] = timetable[course_class]
-        return result
-    
-    def __validate_preset(self, total_preset_course: int, timetable: dict, preset: dict):
-        matched = self.__match_preset(timetable, preset)
-        conflicts = total_preset_course - len(matched)
-        return matched, conflicts
+        if kwargs.get('presets'):
+            conflict += self.validate_preset(timetable, kwargs.get('presets'))
+        
+        while class_id < len(self.courses):
+            course_class1 = self.courses[class_id]
+            neighbor_id = class_id + 1
+
+            # Iterate through all the neighbors
+            while neighbor_id < len(self.courses):
+                course_class2 = self.courses[neighbor_id]
+                conflict += self.validate_neighbor(timetable, course_class1, course_class2)
+                neighbor_id += 1
+            class_id += 1
+        return conflict
+
+    def validate_preset(self, timetable: dict, presets: list[dict]):
+        """
+        Presets is a list of {Course: {'room': Room, 'timeslot': Timeslot}}
+        Searching the `timetable` if all the presets is assigned correctly.
+        """
+        matches = {}
+        for preset in presets:
+            course, subdict = list(preset.items())[0]
+            found = {k: v for k, v in timetable.items() if k.course == course
+                     and any(item in v.items() for item in subdict.items() if item[1] != None)}
+            matches = matches | found
+        print('Found matches:', matches)
+        conflict = len(presets) - len(matches)
+        return 0 if conflict <= 0 else conflict
+
+    def validate_neighbor(self, timetable: dict, course_class1: CourseClass, course_class2: CourseClass):
+        """
+        Validates a class with its neighbor class.
+        Searching if a conflict condition is met, returns 1 if there is a conflict.
+        """
+        room1, timeslot1 = timetable[course_class1].values()
+        room2, timeslot2 = timetable[course_class2].values()
+
+        condition1 = (timeslot1 == timeslot2) and (room1 == room2)
+        condition2 = (course_class1.course.code == course_class2.course.code) and (timeslot1 != timeslot2)
+        condition3 = ((course_class1.number == course_class2.number)
+                      and (course_class1.course.code != course_class2.course.code)
+                      and room1.location.code != room2.location.code)
+        
+        is_conflict = condition1 or condition2 or condition3
+        return 1 if is_conflict else 0
     
     @abstractmethod
     def run(self, *args, **kwargs) -> tuple[dict, int]: pass
