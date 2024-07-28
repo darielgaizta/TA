@@ -1,10 +1,16 @@
 import yaml
+from django.conf import settings
 
-def read(filepath):
-    with open(filepath, 'r') as file:
-        return yaml.safe_load(file)
+class Yml:
+    def __init__(self, filename):
+        self.filename = filename
+        self.filepath = str(settings.RESULT_DIR / filename) + '.yaml'
     
-def write(filepath, content):
-    with open(filepath, 'a') as file:
-        yaml.dump(content, file, sort_keys=False)
-    print('Write YAML success.')
+    def read(self):
+        with open(self.filepath, 'r') as file:
+            return yaml.safe_load(file)
+        
+    def write(self, content):
+        with open(self.filepath, 'a') as file:
+            yaml.dump(content, file, sort_keys=False, default_flow_style=False)
+        print('Write result in YAML success.')

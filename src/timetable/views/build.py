@@ -6,6 +6,7 @@ from .. import utils
 def build(request):
     context = {}
     if request.method == 'POST':
+        filename = 'timetable_' + str(round(time.time() * 1000))
         nb_rooms = int(request.POST['rooms'])
         nb_courses = int(request.POST['courses'])
         nb_classes = int(request.POST['classes'])
@@ -40,14 +41,9 @@ def build(request):
                 max_iterations=iterations
             )
         else: raise Exception('Invalid algorithm.')
-
-        # Write to Excel
-        filename = 'timetable_' + str(round(time.time() * 1000))
-        xl = utils.Xl(filename=filename)
-        xl.setup(data.get_timeslots(), rooms=data.get_rooms())
-        xl.write(solution)
         
         context = {
+            'filename': filename,
             'time_taken': time_taken,
             'solution': solution,
             'conflict': conflict,
@@ -60,5 +56,14 @@ def build(request):
             'iterations': iterations,
             'algorithm': algorithm
         }
+
+        # Write to Excel
+        xl = utils.Xl(filename=filename)
+        xl.setup(data.get_timeslots(), rooms=data.get_rooms())
+        xl.write(solution)
+
+        # Write to YAML
+        yml = utils.Yml(filename=filename)
+        yml.write(content=context)
          
     return render(request, 'build.html', context)
